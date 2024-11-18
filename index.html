@@ -430,7 +430,7 @@ working_copy.loc[working_copy[<span class="py-str">'price'</span>] > <span class
 
 <div class="gold">
     <strong>Golden Rule of DataFrame Modification:</strong>
-    <p>"If you're modifying your DataFrame and don't see <code>loc</code> or <code>iloc</code> in your code, you're probably doing something wrong!"</p>
+    <p>"If you're modifying your DataFrame based on labels and don't see <code>loc</code> in your code, you're probably doing something wrong!"</p>
     
     <pre><code><span class="py-com"># DON'T do this</span>
 df[df[<span class="py-str">'price'</span>] > <span class="py-num">500</span>][<span class="py-str">'price'</span>] *= <span class="py-num">0.9</span>      <span class="py-com"># May work, but could fail!</span>
