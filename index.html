@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            line-height: 1.6;
+            max-width: 100%;  /* Changed from 800px */
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            max-width: 800px;  /* Added max-width here */
+            margin: 0 auto;    /* Center the container */
+            width: 90%;        /* Use percentage for responsive width */
+        }
+        .panda-logo {
+            max-width: 100%;
+            height: auto;
+        }
+        pre {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 4px;
+            overflow-x: auto;
+        }
+        code {
+            font-family: Consolas, Monaco, 'Andale Mono', monospace;
+        }
+        .py-str { color: #098658; }
+        .py-num { color: #098658; }
+        .py-key { color: #0000ff; }
+        .py-com { color: #808080; }
+        .py-op { color: #000000; }
+        .py-var { color: #267f99; }
+        .note {
+            background: #e7f3fe;
+            border-left: 6px solid #2196F3;
+            padding: 15px;
+            margin: 10px 0;
+        }
+        .concept-note {
+            background: #fff3e0;
+            border-left: 6px solid #ff9800;
+            padding: 15px;
+            margin: 10px 0;
+        }
+        .warning {
+            background: #ffebee;
+            border-left: 6px solid #f44336;
+            padding: 15px;
+            margin: 10px 0;
+        }
+        .gold {
+            background: #fff8e1;
+            border-left: 6px solid #ffd700;
+            padding: 15px;
+            margin: 10px 0;
+        }
+        .exercise {
+            background: #f8f4e5;
+            border-left: 6px solid #ffa726;
+            padding: 15px;
+            margin: 10px 0;
+        }
+        @media (max-width: 600px) {
+            body {
+                padding: 10px;
+            }
+            .container {
+                width: 95%;    /* Wider on mobile */
+                padding: 15px; /* Smaller padding on mobile */
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <img src="pandas.jpeg" alt="Panda logo" class="panda-logo" style="display: block; margin: 0 auto 20px auto; border-radius: 4px;">
+
+    <h1>Pandas Tutorial Part 1: Foundations</h1>
+    
+    <h2>Getting Started</h2>
+    <p>First, let's import pandas and create our dataset. We'll be working with a simple electronics store inventory:</p>
+    
+    <pre><code><span class="py-key">import</span> <span class="py-var">pandas</span> <span class="py-key">as</span> <span class="py-var">pd</span>
+
+<span class="py-com"># Our store inventory data</span>
+data = {
+    <span class="py-str">'product'</span>: [<span class="py-str">'Laptop'</span>, <span class="py-str">'Phone'</span>, <span class="py-str">'Tablet'</span>, <span class="py-str">'Watch'</span>, <span class="py-str">'Headphones'</span>],
+    <span class="py-str">'price'</span>: [<span class="py-num">999</span>, <span class="py-num">699</span>, <span class="py-num">499</span>, <span class="py-num">299</span>, <span class="py-num">159</span>],
+    <span class="py-str">'stock'</span>: [<span class="py-num">5</span>, <span class="py-num">15</span>, <span class="py-num">10</span>, <span class="py-num">20</span>, <span class="py-num">25</span>],
+    <span class="py-str">'category'</span>: [<span class="py-str">'Computer'</span>, <span class="py-str">'Phone'</span>, <span class="py-str">'Computer'</span>, <span class="py-str">'Accessory'</span>, <span class="py-str">'Accessory'</span>]
+}</code></pre>
+
+    <h2>Creating DataFrames</h2>
+    <p>A DataFrame is a 2-dimensional table with labeled axes (rows and columns). Here are different ways to create one:</p>
+
+    <pre><code><span class="py-com"># From a dictionary of lists (most common)</span>
+df = pd.DataFrame(data)
+
+<span class="py-com"># From a list of dictionaries (row by row)</span>
+rows = [
+    {<span class="py-str">'product'</span>: <span class="py-str">'Laptop'</span>, <span class="py-str">'price'</span>: <span class="py-num">999</span>, <span class="py-str">'stock'</span>: <span class="py-num">5</span>, <span class="py-str">'category'</span>: <span class="py-str">'Computer'</span>},
+    {<span class="py-str">'product'</span>: <span class="py-str">'Phone'</span>, <span class="py-str">'price'</span>: <span class="py-num">699</span>, <span class="py-str">'stock'</span>: <span class="py-num">15</span>, <span class="py-str">'category'</span>: <span class="py-str">'Phone'</span>}
+]
+df2 = pd.DataFrame(rows)
+
+<span class="py-com"># From lists (each list becomes a column)</span>
+products = [<span class="py-str">'Laptop'</span>, <span class="py-str">'Phone'</span>]
+prices = [<span class="py-num">999</span>, <span class="py-num">699</span>]
+df3 = pd.DataFrame({
+    <span class="py-str">'product'</span>: products,
+    <span class="py-str">'price'</span>: prices
+})</code></pre>
+
+    <div class="note">
+        <strong>Key Point:</strong> DataFrames are column-oriented internally. Each column is a Series (like a single column in a spreadsheet).
+    </div>
+
+    <div class="concept-note">
+        <strong>Programming Concept:</strong> In the code above, we're creating a dictionary "on the fly" and immediately using it as an argument to pd.DataFrame(). This is a common programming pattern called an "inline dictionary" or "anonymous dictionary". Instead of:
+        <pre><code><span class="py-com"># Creating dictionary first</span>
+my_dict = {
+    <span class="py-str">'product'</span>: products,
+    <span class="py-str">'price'</span>: prices
+}
+df3 = pd.DataFrame(my_dict)
+
+<span class="py-com"># We do it in one step</span>
+df3 = pd.DataFrame({
+    <span class="py-str">'product'</span>: products,
+    <span class="py-str">'price'</span>: prices
+})</code></pre>
+        Both approaches give the same result, but the second is more concise when we don't need to reuse the dictionary.
+    </div>
+
+    <h2>Basic Operations</h2>
+    <p>Let's look at some basic ways to inspect and work with our data:</p>
+
+    <pre><code><span class="py-com"># View first few rows</span>
+df.head()
+
+<span class="py-com"># Get basic information about the DataFrame</span>
+df.info()
+
+<span class="py-com"># Get column names</span>
+df.columns
+
+<span class="py-com"># Get a single column</span>
+prices = df[<span class="py-str">'price'</span>]
+
+<span class="py-com"># Get multiple columns</span>
+subset = df[[<span class="py-str">'product'</span>, <span class="py-str">'price'</span>]]</code></pre>
+
+<div class="concept-note">
+    <strong>Important Syntax Note:</strong> The difference between single and double brackets for column selection is crucial:
+    <pre><code><span class="py-com"># Single brackets - returns a Series (1-dimensional)</span>
+prices = df[<span class="py-str">'price'</span>]  <span class="py-com"># This is a Series</span>
+
+<span class="py-com"># WRONG - This will raise a KeyError!</span>
+wrong_way = df[<span class="py-str">'product'</span>, <span class="py-str">'price'</span>]  <span class="py-com"># Don't do this!</span>
+
+<span class="py-com"># Double brackets - returns a DataFrame (2-dimensional)</span>
+subset = df[[<span class="py-str">'product'</span>, <span class="py-str">'price'</span>]]  <span class="py-com"># This is still a DataFrame</span></code></pre>
+
+    <p>Why does this matter?</p>
+    <ul>
+        <li>Single brackets <code>df['column']</code> tell pandas to return a 1-D Series object</li>
+        <li>Adding more items inside single brackets like <code>df['col1', 'col2']</code> will raise an error because a Series can only hold one column</li>
+        <li>Double brackets <code>df[['col1', 'col2']]</code> tell pandas you want a 2-D DataFrame, which can hold multiple columns</li>
+        <li>The inner <code>[]</code> creates a list of column names, while the outer <code>[]</code> is the DataFrame indexing operator</li>
+    </ul>
+</div>
+
+    <h2>Boolean Indexing</h2>
+    <p>One of pandas' most powerful features is boolean indexing - filtering data based on conditions:</p>
+
+    <pre><code><span class="py-com"># Create a boolean mask</span>
+expensive = df[<span class="py-str">'price'</span>] > <span class="py-num">500</span>
+print(expensive)  <span class="py-com"># Shows True/False for each row</span>
+
+<span class="py-com"># Use the mask to filter the DataFrame</span>
+expensive_items = df[expensive]
+
+<span class="py-com"># Combine conditions</span>
+mask = (df[<span class="py-str">'price'</span>] > <span class="py-num">500</span>) & (df[<span class="py-str">'stock'</span>] > <span class="py-num">10</span>)
+filtered = df[mask]</code></pre>
+
+    <div class="note">
+        <strong>Important:</strong> When combining conditions, always use parentheses around each condition and use & (and) or | (or) operators.
+    </div>
+
+    <div class="concept-note">
+        <strong>Python Magic: Operator Overloading</strong>
+        <p>When you see this code:</p>
+        <pre><code>expensive = df[<span class="py-str">'price'</span>] > 500</code></pre>
+        
+        <p>What's actually happening?</p>
+        <ol>
+            <li><code>df['price']</code> creates a pandas Series object</li>
+            <li>The <code>></code> operator doesn't just return True/False - pandas has redefined what this operator does!</li>
+            <li>Instead of a single boolean, it returns a new Series of booleans - one for each price</li>
+        </ol>
+    
+        <pre><code><span class="py-com"># Regular Python comparison</span>
+num = 600
+result = num > 500  <span class="py-com"># Returns a single True</span>
+
+<span class="py-com"># Pandas Series comparison</span>
+prices = df[<span class="py-str">'price'</span>]  <span class="py-com"># A Series of [999, 699, 499, 299, 159]</span>
+expensive = prices > 500
+<span class="py-com"># Returns a Series of [True, True, False, False, False]</span></code></pre>
+    
+        <p>This is an example of "operator overloading" in Python - when a class (like Series) redefines what operators like <code>></code>, <code>+</code>, <code>*</code> do. It's similar to how:</p>
+        <ul>
+            <li><code>"hello" + "world"</code> concatenates strings</li>
+            <li><code>[1, 2] + [3, 4]</code> concatenates lists</li>
+            <li><code>5 + 3</code> adds numbers</li>
+        </ul>
+        <p>The <code>+</code> operator does different things based on what types it's working with!</p>
+    </div>
+
+    <h2>Exercises</h2>
+    <div class="exercise">
+        <strong>Exercise 1:</strong> Create a DataFrame
+        <ul>
+            <li>Create a new DataFrame with 3 columns: 'name', 'age', and 'city'</li>
+            <li>Add at least 2 rows of data</li>
+            <li>Try creating it using both the dictionary method and the list of dictionaries method</li>
+        </ul>
+    </div>
+
+    <div class="exercise">
+        <strong>Exercise 2:</strong> Matrix Addition
+        <ul>
+            <li>Given these two DataFrames:
+                <pre>df1 = pd.DataFrame([
+    [1, 0, 1],
+    [0, 1, 0],
+    [1, 0, 1]
+])
+
+df2 = pd.DataFrame([
+    [0, 1, 0],
+    [1, 0, 1],
+    [0, 1, 0]
+])</pre>
+            </li>
+            <li>Add them together and print the result</li>
+            <li>The output should be a DataFrame filled with all 1s</li>
+        </ul>
+    </div>
+
+    <div class="exercise">
+        <strong>Exercise 3:</strong> Boolean Indexing
+        <ul>
+            <li>Using our store inventory DataFrame (df):
+                <ul>
+                    <li>Find all products that cost less than 300</li>
+                    <li>Find all Computer category items</li>
+                    <li>Find all products that cost more than 500 and have less than 15 in stock</li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+
+    <div class="exercise">
+        <strong>Exercise 4:</strong> Column Operations
+        <ul>
+            <li>Create a new column 'total_value' that multiplies 'price' by 'stock'</li>
+            <li>Find the most expensive product</li>
+            <li>Calculate how many total items are in stock</li>
+        </ul>
+    </div>
+
+</div>
+
+<div class="container">
+    <h1>Pandas Tutorial Part 2: Data Access and Modification</h1>
+    
+    <h2>Setting Up Our Data</h2>
+    <p>Let's continue with our electronics store inventory:</p>
+    
+    <pre><code><span class="py-key">import</span> <span class="py-var">pandas</span> <span class="py-key">as</span> <span class="py-var">pd</span>
+
+<span class="py-com"># Create our store data</span>
+df = pd.DataFrame({
+    <span class="py-str">'product'</span>: [<span class="py-str">'Laptop'</span>, <span class="py-str">'Phone'</span>, <span class="py-str">'Tablet'</span>, <span class="py-str">'Watch'</span>, <span class="py-str">'Headphones'</span>],
+    <span class="py-str">'price'</span>: [<span class="py-num">999</span>, <span class="py-num">699</span>, <span class="py-num">499</span>, <span class="py-num">299</span>, <span class="py-num">159</span>],
+    <span class="py-str">'stock'</span>: [<span class="py-num">5</span>, <span class="py-num">15</span>, <span class="py-num">10</span>, <span class="py-num">20</span>, <span class="py-num">25</span>],
+    <span class="py-str">'category'</span>: [<span class="py-str">'Computer'</span>, <span class="py-str">'Phone'</span>, <span class="py-str">'Computer'</span>, <span class="py-str">'Accessory'</span>, <span class="py-str">'Accessory'</span>]
+})</code></pre>
+
+<p>Now, let's add a new column `discounted`, which will hold True/False values.</p>
+
+    <h2>Understanding loc and iloc</h2>
+    <p>These are pandas' primary tools for accessing and modifying data:</p>
+
+    <div class="note">
+        <strong>loc</strong>: Label/logical based access ("location")<br>
+        <strong>iloc</strong>: Integer based access ("integer location")
+    </div>
+
+    <pre><code><span class="py-com"># loc examples</span>
+<span class="py-com"># Get rows where price > 500</span>
+expensive = df.loc[df[<span class="py-str">'price'</span>] > <span class="py-num">500</span>]
+
+<span class="py-com"># Get specific columns for these expensive items</span>
+expensive_details = df.loc[df[<span class="py-str">'price'</span>] > <span class="py-num">500</span>, [<span class="py-str">'product'</span>, <span class="py-str">'price'</span>]]
+
+<span class="py-com"># iloc examples</span>
+<span class="py-com"># Get first row</span>
+first_row = df.iloc[<span class="py-num">0</span>]
+
+<span class="py-com"># Get first two rows and first two columns</span>
+subset = df.iloc[<span class="py-num">0</span>:<span class="py-num">2</span>, <span class="py-num">0</span>:<span class="py-num">2</span>]</code></pre>
+
+<div class="note">
+    <strong>Key Difference:</strong> While <strong>loc</strong> works with labeled data and conditions, <strong>iloc</strong> is designed for positional operations common in numerical analysis, matrix operations, and algorithmic computations where you care about positions rather than labels (like working with a mathematical matrix rather than a labeled dataset).
+</div>
+
+<div class="concept-note">
+    <h3>Key Points About loc vs iloc</h3>
+    
+    <h4>When to use loc:</h4>
+    <ul>
+        <li>When working with labeled data:
+            <code>df.loc['row_label', 'column_name']</code></li>
+        <li>When filtering with conditions:
+            <code>df.loc[df['price'] > 500]</code></li>
+        <li>When selecting specific columns by name:
+            <code>df.loc[:, ['name', 'price']]</code></li>
+        <li>When doing data analysis tasks like filtering, updating based on conditions</li>
+    </ul>
+
+    <h4>When to use iloc:</h4>
+    <ul>
+        <li>When working with numerical positions:
+            <code>df.iloc[0:5, 2:4]</code></li>
+        <li>When doing algorithmic operations:
+            <pre><code>for i in range(len(df)):
+    window = df.iloc[i:i+3]  # sliding window</code></pre></li>
+        <li>When working with fixed patterns:
+            <code>df.iloc[::2]  # every other row</code></li>
+        <li>When column positions matter more than names:
+            <code>df.iloc[:, [-1, 0]]  # last and first columns</code></li>
+    </ul>
+
+    <h4>Common Patterns:</h4>
+    <ul>
+        <li><strong>loc</strong>: Uses boolean arrays, labels, and column names
+            <pre><code>df.loc[mask, 'column_name']
+df.loc[df['price'] > 500, ['name', 'price']]</code></pre>
+        </li>
+        <li><strong>iloc</strong>: Uses integers, ranges, and position-based logic
+            <pre><code>df.iloc[-5:, :2]  # last 5 rows, first 2 columns
+df.iloc[[0, 2, 4]]  # specific rows by position</code></pre>
+        </li>
+    </ul>
+
+    <div class="pro-tip">
+        <strong>Pro Tip:</strong> Mix them when needed! Use <code>iloc</code> for algorithmic operations and <code>loc</code> for data analysis in the same code. They serve different purposes and work well together.
+    </div>
+</div>
+
+<div class="warning">
+    <strong>Important Limitations:</strong>
+    <ul>
+        <li><strong>loc</strong>: Cannot use integer-based slicing (must use labels or boolean masks)</li>
+        <li><strong>iloc</strong>: Cannot use:
+            <ul>
+                <li>Logical operators (<code>></code>, <code><</code>, <code>&</code>, <code>|</code>)</li>
+                <li>Column/row labels</li>
+                <li>Boolean masks</li>
+            </ul>
+        </li>
+    </ul>
+    <pre><code># These will NOT work:
+df.iloc[df['price'] > 500]    # No logical operations in iloc
+df.iloc['product']            # No labels in iloc
+
+df.loc[1:5]                   # No integer slicing in loc
+df.loc[::2]                   # No stride slicing in loc</code></pre>
+</div>
+
+    <h2>Modifying Data</h2>
+    <p>The proper way to modify data using loc:</p>
+
+    <pre><code><span class="py-com"># Correct way to modify data</span>
+df.loc[df[<span class="py-str">'price'</span>] > <span class="py-num">500</span>, <span class="py-str">'price'</span>] *= <span class="py-num">0.9</span>  <span class="py-com"># 10% discount</span>
+
+<span class="py-com"># Adding a new column</span>
+df.loc[:, <span class="py-str">'discounted'</span>] = df[<span class="py-str">'price'</span>] < <span class="py-num">300</span></code></pre>
+
+    <div class="warning">
+        <strong>Warning!</strong> Avoid chained indexing:
+        <pre><code><span class="py-com"># Don't do this:</span>
+df[df[<span class="py-str">'price'</span>] > <span class="py-num">500</span>][<span class="py-str">'price'</span>] *= <span class="py-num">0.9</span>  <span class="py-com"># Might not work!</span></code></pre>
+    </div>
+
+    <h2>Views vs Copies</h2>
+    <p>When you select data from a DataFrame, pandas might give you either a "view" or a "copy". A view is like a window into the original data - any changes you make through a view will affect the original DataFrame. A copy, on the other hand, is a completely separate piece of data - changes to a copy won't affect the original. The tricky part is that pandas sometimes decides to give you a view and sometimes a copy, depending on how you select the data!</p>
+    <p>Understanding when pandas creates a view or a copy is crucial:</p>
+
+    <pre><code><span class="py-com"># This creates a view (maybe!)</span>
+subset = df[df[<span class="py-str">'price'</span>] > <span class="py-num">500</span>]
+
+<span class="py-com"># This creates a definite copy</span>
+subset = df[df[<span class="py-str">'price'</span>] > <span class="py-num">500</span>].copy()
+
+<span class="py-com"># Safe way to modify data</span>
+<span class="py-com"># 1. Create explicit copy if you need one</span>
+working_copy = df.copy()
+
+<span class="py-com"># 2. Use loc for modifications</span>
+working_copy.loc[working_copy[<span class="py-str">'price'</span>] > <span class="py-num">500</span>, <span class="py-str">'price'</span>] *= <span class="py-num">0.9</span></code></pre>
+
+<div class="gold">
+    <strong>Golden Rule of DataFrame Modification:</strong>
+    <p>"If you're modifying your DataFrame and don't see <code>loc</code> or <code>iloc</code> in your code, you're probably doing something wrong!"</p>
+    
+    <pre><code><span class="py-com"># DON'T do this</span>
+df[df[<span class="py-str">'price'</span>] > <span class="py-num">500</span>][<span class="py-str">'price'</span>] *= <span class="py-num">0.9</span>      <span class="py-com"># May work, but could fail!</span>
+
+<span class="py-com"># DO this instead</span>
+df.loc[df[<span class="py-str">'price'</span>] > <span class="py-num">500</span>, <span class="py-str">'price'</span>] *= <span class="py-num">0.9</span>  <span class="py-com"># Clear, safe, and correct</span></code></pre>
+
+    <p>Why? The <code>loc</code> accessor is designed specifically for label-based DataFrame modifications. It:</p>
+    <ul>
+        <li>Prevents the dreaded SettingWithCopyWarning</li>
+        <li>Makes your intentions clear</li>
+        <li>Ensures modifications happen on the original DataFrame</li>
+        <li>Works reliably in all cases</li>
+    </ul>
+</div>
+
+    <h2>Column Operations</h2>
+    <p>Working with columns effectively:</p>
+
+    <pre><code><span class="py-com"># Adding new columns</span>
+df[<span class="py-str">'total_value'</span>] = df[<span class="py-str">'price'</span>] * df[<span class="py-str">'stock'</span>]
+
+<span class="py-com"># Removing columns</span>
+df = df.drop(<span class="py-str">'discounted'</span>, axis=<span class="py-num">1</span>)  <span class="py-com"># axis=1 means columns</span>
+
+<span class="py-com"># Renaming columns</span>
+df = df.rename(columns={<span class="py-str">'price'</span>: <span class="py-str">'unit_price'</span>})
+
+<span class="py-com"># Multiple column operations</span>
+df[<span class="py-str">'price_per_unit'</span>] = df[<span class="py-str">'total_value'</span>] / df[<span class="py-str">'stock'</span>]</code></pre>
+
+    <div class="note">
+        <strong>Remember:</strong> Column operations are vectorized - they operate on entire columns at once, making them very efficient.
+    </div>
+
+    <h2>Exercises</h2>
+    <div class="exercise">
+        <strong>Exercise 1:</strong> Working with loc
+        <ul>
+            <li>Find all products in the 'Computer' category and give them a 15% price increase</li>
+            <li>Add a new column 'status' that says 'Low' if stock < 10, 'Medium' if stock < 20, and 'High' otherwise</li>
+            <li>Use loc to verify your changes</li>
+        </ul>
+    </div>
+
+    <div class="exercise">
+        <strong>Exercise 2:</strong> Views and Copies
+        <ul>
+            <li>Create a copy of the DataFrame containing only 'Accessory' category items</li>
+            <li>Modify the prices in the copy</li>
+            <li>Verify that the original DataFrame is unchanged</li>
+            <li>Try to reproduce a SettingWithCopyWarning and then fix it using loc</li>
+        </ul>
+    </div>
+
+    <div class="exercise">
+        <strong>Exercise 3:</strong> Column Operations
+        <ul>
+            <li>Add a 'sale_price' column that's 20% less than 'price'</li>
+            <li>Add a 'profit' column that's 30% of the sale_price</li>
+            <li>Create a 'profit_margin' column showing profit as a percentage of sale_price</li>
+            <li>Drop any columns you don't need</li>
+        </ul>
+    </div>
+
+    <div class="note">
+        <strong>Key Takeaways:</strong>
+        <ul>
+            <li>Always use loc for explicit data access and modification</li>
+            <li>Be aware of views vs copies - use .copy() when you need a separate copy</li>
+            <li>Column operations are efficient because pandas is column-oriented</li>
+            <li>Chained indexing can lead to unexpected behavior - avoid it!</li>
+        </ul>
+    </div>
+</div>
+<div class="container">
+    <h1>Pandas Tutorial Part 3: Advanced Operations</h1>
+    
+    <h2>Setting Up Our Data</h2>
+    <p>Let's create two DataFrames - one for products and one for sales:</p>
+    
+    <pre><code><span class="py-key">import</span> <span class="py-var">pandas</span> <span class="py-key">as</span> <span class="py-var">pd</span>
+
+<span class="py-com"># Products data</span>
+products = pd.DataFrame({
+    <span class="py-str">'product_id'</span>: [<span class="py-num">1</span>, <span class="py-num">2</span>, <span class="py-num">3</span>, <span class="py-num">4</span>, <span class="py-num">5</span>],
+    <span class="py-str">'product'</span>: [<span class="py-str">'Laptop'</span>, <span class="py-str">'Phone'</span>, <span class="py-str">'Tablet'</span>, <span class="py-str">'Watch'</span>, <span class="py-str">'Headphones'</span>],
+    <span class="py-str">'category'</span>: [<span class="py-str">'Computer'</span>, <span class="py-str">'Phone'</span>, <span class="py-str">'Computer'</span>, <span class="py-str">'Accessory'</span>, <span class="py-str">'Accessory'</span>],
+    <span class="py-str">'price'</span>: [<span class="py-num">999</span>, <span class="py-num">699</span>, <span class="py-num">499</span>, <span class="py-num">299</span>, <span class="py-num">159</span>]
+})
+
+<span class="py-com"># Sales data</span>
+sales = pd.DataFrame({
+    <span class="py-str">'date'</span>: [<span class="py-str">'2024-01-01'</span>, <span class="py-str">'2024-01-01'</span>, <span class="py-str">'2024-01-02'</span>, <span class="py-str">'2024-01-02'</span>],
+    <span class="py-str">'product_id'</span>: [<span class="py-num">1</span>, <span class="py-num">2</span>, <span class="py-num">1</span>, <span class="py-num">5</span>],
+    <span class="py-str">'quantity'</span>: [<span class="py-num">1</span>, <span class="py-num">2</span>, <span class="py-num">1</span>, <span class="py-num">3</span>]
+})</code></pre>
+
+    <h2>Grouping Data</h2>
+    <p>GroupBy operations let us split data into groups and perform calculations:</p>
+
+    <pre><code><span class="py-com"># Basic grouping</span>
+category_counts = products.groupby(<span class="py-str">'category'</span>).size()
+category_avg_price = products.groupby(<span class="py-str">'category'</span>)[<span class="py-str">'price'</span>].mean()
+
+<span class="py-com"># Multiple aggregations</span>
+summary = products.groupby(<span class="py-str">'category'</span>).agg({
+    <span class="py-str">'price'</span>: [<span class="py-str">'mean'</span>, <span class="py-str">'min'</span>, <span class="py-str">'max'</span>],
+    <span class="py-str">'product'</span>: <span class="py-str">'count'</span>
+})
+
+<span class="py-com"># Group sales by date</span>
+daily_sales = sales.groupby(<span class="py-str">'date'</span>)[<span class="py-str">'quantity'</span>].sum()</code></pre>
+
+    <div class="note">
+        <strong>Remember:</strong> groupby creates a GroupBy object. You need to apply an aggregation function (like mean(), sum(), count()) to get results.
+    </div>
+
+    <h2>Merging DataFrames</h2>
+    <p>Combining data from different DataFrames:</p>
+
+    <pre><code><span class="py-com"># Simple merge on product_id</span>
+sales_with_products = sales.merge(products, on=<span class="py-str">'product_id'</span>)
+
+<span class="py-com"># Calculate total sales value</span>
+sales_with_products[<span class="py-str">'total_value'</span>] = sales_with_products[<span class="py-str">'quantity'</span>] * sales_with_products[<span class="py-str">'price'</span>]
+
+<span class="py-com"># Different types of joins</span>
+<span class="py-com"># Left join (keep all rows from left DataFrame)</span>
+left_join = sales.merge(products, on=<span class="py-str">'product_id'</span>, how=<span class="py-str">'left'</span>)
+
+<span class="py-com"># Right join (keep all rows from right DataFrame)</span>
+right_join = sales.merge(products, on=<span class="py-str">'product_id'</span>, how=<span class="py-str">'right'</span>)</code></pre>
+
+    <div class="tip">
+        <strong>Think SQL:</strong> Pandas merges work like SQL joins:
+        <ul>
+            <li>inner (default): only matching rows</li>
+            <li>left: all rows from left DataFrame</li>
+            <li>right: all rows from right DataFrame</li>
+            <li>outer: all rows from both DataFrames</li>
+        </ul>
+    </div>
+
+    <h2>Common Patterns</h2>
+    <p>Here are some frequently used pandas patterns:</p>
+
+    <pre><code><span class="py-com"># Pattern 1: Value counts</span>
+category_distribution = products[<span class="py-str">'category'</span>].value_counts()
+
+<span class="py-com"># Pattern 2: Sort and get top N</span>
+top_products = sales_with_products.groupby(<span class="py-str">'product'</span>)[<span class="py-str">'quantity'</span>].sum().sort_values(ascending=<span class="py-key">False</span>).head()
+
+<span class="py-com"># Pattern 3: Date handling</span>
+sales[<span class="py-str">'date'</span>] = pd.to_datetime(sales[<span class="py-str">'date'</span>])
+sales[<span class="py-str">'month'</span>] = sales[<span class="py-str">'date'</span>].dt.month
+
+<span class="py-com"># Pattern 4: Pivot tables</span>
+pivot_table = sales_with_products.pivot_table(
+    values=<span class="py-str">'quantity'</span>,
+    index=<span class="py-str">'date'</span>,
+    columns=<span class="py-str">'category'</span>,
+    aggfunc=<span class="py-str">'sum'</span>
+).fillna(<span class="py-num">0</span>)</code></pre>
+
+    <h2>Exercises</h2>
+    <div class="exercise">
+        <strong>Exercise 1:</strong> Grouping
+        <ul>
+            <li>Calculate the total quantity sold for each product</li>
+            <li>Find the average price by category</li>
+            <li>Count how many products are in each category</li>
+            <li>Find the date with the highest total sales value</li>
+        </ul>
+    </div>
+
+    <div class="exercise">
+        <strong>Exercise 2:</strong> Merging
+        <ul>
+            <li>Create a new DataFrame with customer data (customer_id, name, city)</li>
+            <li>Add customer_id to the sales DataFrame</li>
+            <li>Merge all three DataFrames (sales, products, customers)</li>
+            <li>Find which customer spent the most money</li>
+        </ul>
+    </div>
+
+    <div class="exercise">
+        <strong>Exercise 3:</strong> Advanced Patterns
+        <ul>
+            <li>Create a pivot table showing sales by category and date</li>
+            <li>Calculate the percentage of total sales for each product</li>
+            <li>Find which day of the week has the highest sales</li>
+            <li>Create a running total of sales by date</li>
+        </ul>
+    </div>
+
+    <div class="warning">
+        <strong>Common Mistakes to Avoid:</strong>
+        <ul>
+            <li>Forgetting to apply an aggregation after groupby</li>
+            <li>Using merge without specifying the 'how' parameter</li>
+            <li>Not handling missing values after merging</li>
+            <li>Forgetting to convert dates to datetime</li>
+        </ul>
+    </div>
+
+    <div class="note">
+        <strong>Final Tips:</strong>
+        <ul>
+            <li>Always check your data after merging (use info() or describe())</li>
+            <li>Remember that groupby operations create new DataFrames</li>
+            <li>Use value_counts() for quick frequency analysis</li>
+            <li>Pivot tables are great for reshaping data and creating reports</li>
+        </ul>
+    </div>
+
+    <h2>Conclusion</h2>
+    <p>You've now learned the core concepts of pandas! Practice these operations with different datasets to become more comfortable with them. Remember:
+    <ul>
+        <li>Start simple - break complex operations into steps</li>
+        <li>Use descriptive variable names</li>
+        <li>Check your data after each major operation</li>
+        <li>Keep your code clean and documented</li>
+    </ul>
+    </p>
+</div>
+</body>
+</html>
